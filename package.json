@@ -1,10 +1,10 @@
 {
-  "name": "mup",
-  "version": "1.2.4",
+  "name": "mup2",
+  "version": "1.2.5",
   "description": "Production Quality Meteor Deployments",
   "main": "lib/index.js",
   "bin": {
-    "mup": "./index.js"
+    "mup2": "./index.js"
   },
   "scripts": {
     "prepublish": "npm run build -s",

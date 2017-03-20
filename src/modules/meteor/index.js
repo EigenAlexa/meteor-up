@@ -9,6 +9,7 @@ import nodemiral from 'nodemiral';
 import random from 'random-seed';
 import uuid from 'uuid';
 import os from 'os';
+import extend from 'extend';
 
 const log = debug('mup:module:meteor');
 
@@ -221,11 +222,24 @@ export function envconfig(api) {
       appName: config.name
     }
   });
-
   const sessions = api.getSessions(['meteor']);
+  
+
   return runTaskList(list, sessions, {
     series: true,
     verbose: api.getVerbose()
+  }).then(() => {
+    const serverConfig = api.getConfig().servers;
+    let count = 0;
+    for (var name in serverConfig) {
+      const info = serverConfig[name];
+      const l = nodemiral.taskList("Sending Server Host");
+      l.execute("echo to file", {
+        command: 'echo SERVER_HOST=' + info.env.SERVER_HOST + ' >> /opt/' + config.name + '/config/env.list; cat /opt/' + config.name + '/config/env.list'
+      }, (stdout, stderr) => {});
+      l.run(sessions[count]);
+      count++;
+    }
   });
 }
 

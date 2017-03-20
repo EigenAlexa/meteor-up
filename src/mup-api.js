@@ -3,8 +3,9 @@ import fs from 'fs';
 import nodemiral from 'nodemiral';
 import parseJson from 'parse-json';
 import path from 'path';
-import { resolvePath } from './modules/utils';
+import { resolvePath, runTaskList } from './modules/utils';
 import validateConfig from './validate/index';
+import extend from 'extend';
 
 export default class MupAPI {
   constructor(base, args, configPath, settingsPath, verbose) {
@@ -56,6 +57,7 @@ export default class MupAPI {
       console.log('create an issue at https://github.com/zodern/meteor-up');
       console.log('');
     }
+
   }
 
   getConfig() {
@@ -175,6 +177,8 @@ export default class MupAPI {
       if (info.opts) {
         opts.ssh = info.opts;
       }
+      // extend the environment variables by the variables in each server options.
+      //config.meteor.env = extend(config.meteor.env, info.env);
 
       if (info.pem) {
         try {
@@ -200,6 +204,7 @@ export default class MupAPI {
       }
 
       const session = nodemiral.session(info.host, auth, opts);
+      
       this.sessions[name] = session;
     }
   }

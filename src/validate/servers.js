@@ -18,7 +18,8 @@ const schema = joi.object().keys().pattern(/.*/, {
   password: joi.string(),
   opts: joi.object().keys({
     port: joi.number()
-  })
+  }),
+  env: joi.object().pattern(/[\s\S]*/, [joi.string(), joi.number()])
 }).min(1);
 
 export default function validateServers(servers) {
